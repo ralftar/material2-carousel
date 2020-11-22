@@ -9,11 +9,7 @@ import { MatCarouselModule } from './carousel.module';
 
 @Component({
   selector: 'mat-carousel-test-wrapper-component',
-  template: `
-    <mat-carousel [autoplay]="false">
-      <mat-carousel-slide *ngFor="let slide of slides"></mat-carousel-slide>
-    </mat-carousel>
-  `
+  template: '<mat-carousel [autoplay]="false"><mat-carousel-slide *ngFor="let slide of slides"></mat-carousel-slide></mat-carousel>'
 })
 class MatCarouselTestWrapperComponent {
   public slides = new Array<never>(5);

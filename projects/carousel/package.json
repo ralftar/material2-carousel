@@ -1,7 +1,7 @@
 {
   "name": "ng-mat-carousel",
   "description": "Carousel component for Angular using Material Design.",
-  "version": "0.7.9",
+  "version": "0.11.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ralftar/ng-mat-carousel.git"

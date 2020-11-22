@@ -159,7 +159,7 @@ export class MatCarouselComponent
     } else {
       this.slidesList.first.load = true;
       setTimeout( () => {
-        this.slidesList.find( (s, i) => i === 1 % this.slidesList.length).load = true; 
+        this.slidesList.find( (s, i) => i === 1 % this.slidesList.length).load = true;
         this.slidesList.find( (s, i) => i === (this.slidesList.length - 1) % this.slidesList.length).load = true;
       }, this.interval$.getValue() / 2);
     }

@@ -28,18 +28,19 @@
             "tsConfig": "projects/carousel/tsconfig.spec.json",
             "karmaConfig": "projects/carousel/karma.conf.js",
             "stylePreprocessorOptions": {
-              "includePaths": ["projects/carousel/src/styles"]
+              "includePaths": [
+                "projects/carousel/src/styles"
+              ]
             }
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/carousel/tsconfig.lib.json",
-              "projects/carousel/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "projects/carousel/**/*.ts",
+              "projects/carousel/**/*.html"
+            ]
           }
         }
       }
@@ -67,7 +68,9 @@
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets"
             ],
-            "styles": ["projects/demo/src/styles.scss"],
+            "styles": [
+              "projects/demo/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -120,7 +123,9 @@
             "polyfills": "projects/demo/src/polyfills.ts",
             "tsConfig": "projects/demo/tsconfig.spec.json",
             "karmaConfig": "projects/demo/karma.conf.js",
-            "styles": ["projects/demo/src/styles.scss"],
+            "styles": [
+              "projects/demo/src/styles.scss"
+            ],
             "scripts": [],
             "assets": [
               "projects/demo/src/favicon.ico",
@@ -129,13 +134,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/demo/tsconfig.app.json",
-              "projects/demo/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "projects/demo//**/*.ts",
+              "projects/demo//**/*.html"
+            ]
           }
         }
       }
