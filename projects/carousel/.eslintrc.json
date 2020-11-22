@@ -16,6 +16,8 @@
         "createDefaultProgram": true
       },
       "rules": {
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
         "@angular-eslint/component-selector": [
           "error",
           {

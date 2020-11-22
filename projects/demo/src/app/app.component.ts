@@ -8,17 +8,19 @@ import {
 } from 'ng-mat-carousel';
 
 @Component({
-  selector: 'app-root',
+  selector: 'mat-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  private static readonly INSTALL_TEXT =
-    'npm install ng-mat-carousel';
+  private static readonly installText = 'npm install ng-mat-carousel';
+
+  @ViewChildren(MatCarouselSlideComponent) public carouselSlides: QueryList<
+    MatCarouselSlideComponent
+  >;
 
   public slidesList = new Array<never>(5);
   public showContent = false;
-
   public parentHeight = 'auto';
   public timings = '250ms ease-in';
   public autoplay = true;
@@ -38,12 +40,7 @@ export class AppComponent {
   public useMouseWheel = false;
   public orientation: Orientation = 'ltr';
   public log: string[] = [];
-
-  @ViewChildren(MatCarouselSlideComponent) public carouselSlides: QueryList<
-    MatCarouselSlideComponent
-  >;
   public darkMode = false;
-
   public get code(): string {
     return `
 <div [style.height]="${this.parentHeight}">
@@ -115,7 +112,7 @@ export class AppComponent {
 
   public copy(): void {
     const textarea = document.createElement('textarea');
-    textarea.value = AppComponent.INSTALL_TEXT;
+    textarea.value = AppComponent.installText;
     textarea.setAttribute('readonly', '');
     textarea.style.position = 'absolute';
     textarea.style.left = '-99999px';

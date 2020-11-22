@@ -26,9 +26,9 @@ import { MatCarousel, Orientation, SvgIconOverrides } from './carousel';
 import { MatCarouselSlideComponent } from './carousel-slide/carousel-slide.component';
 
 enum Direction {
-  Left,
-  Right,
-  Index
+  left,
+  right,
+  index
 }
 
 @Component({
@@ -98,7 +98,7 @@ export class MatCarouselComponent
   }
 
   @Output()
-  public change: EventEmitter<number> = new EventEmitter<number>();
+  public changeEmitter: EventEmitter<number> = new EventEmitter<number>();
 
   public get currentIndex(): number {
     if (this.listKeyManager) {
@@ -152,6 +152,48 @@ export class MatCarouselComponent
     private renderer: Renderer2,
     @Inject(PLATFORM_ID) private platformId
   ) {}
+
+  @HostListener('keyup', ['$event'])
+  public onKeyUp(event: KeyboardEvent): void {
+    if (this.useKeyboard && !this.playing) {
+      this.listKeyManager.onKeydown(event);
+    }
+  }
+
+  @HostListener('mouseenter')
+  public onMouseEnter(): void {
+    this.stopTimer();
+  }
+
+  @HostListener('mouseleave')
+  public onMouseLeave(): void {
+    this.startTimer(this._autoplay);
+  }
+
+  @HostListener('mousewheel', ['$event'])
+  public onMouseWheel(event: WheelEvent): void {
+    if (this.useMouseWheel) {
+      event.preventDefault(); // prevent window to scroll
+      const deltaY = Math.sign(event.deltaY);
+
+      if (deltaY > 0) {
+        this.next();
+      } else if (deltaY < 0) {
+        this.previous();
+      }
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  public onResize(event: Event): void {
+    // Reset carousel when width is resized
+    // in order to avoid major glitches.
+    const w = this.getWidth();
+    if (w !== this.width) {
+      this.width = w;
+      this.slideTo(0);
+    }
+  }
 
   public ngAfterContentInit(): void {
     if (!this.lazyLoad) {
@@ -216,57 +258,15 @@ export class MatCarouselComponent
   }
 
   public next(): void {
-    this.goto(Direction.Right);
+    this.goto(Direction.right);
   }
 
   public previous(): void {
-    this.goto(Direction.Left);
+    this.goto(Direction.left);
   }
 
   public slideTo(index: number): void {
-    this.goto(Direction.Index, index);
-  }
-
-  @HostListener('keyup', ['$event'])
-  public onKeyUp(event: KeyboardEvent): void {
-    if (this.useKeyboard && !this.playing) {
-      this.listKeyManager.onKeydown(event);
-    }
-  }
-
-  @HostListener('mouseenter')
-  public onMouseEnter(): void {
-    this.stopTimer();
-  }
-
-  @HostListener('mouseleave')
-  public onMouseLeave(): void {
-    this.startTimer(this._autoplay);
-  }
-
-  @HostListener('mousewheel', ['$event'])
-  public onMouseWheel(event: WheelEvent): void {
-    if (this.useMouseWheel) {
-      event.preventDefault(); // prevent window to scroll
-      const Δ = Math.sign(event.deltaY);
-
-      if (Δ > 0) {
-        this.next();
-      } else if (Δ < 0) {
-        this.previous();
-      }
-    }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  public onResize(event: Event): void {
-    // Reset carousel when width is resized
-    // in order to avoid major glitches.
-    const w = this.getWidth();
-    if (w !== this.width) {
-      this.width = w;
-      this.slideTo(0);
-    }
+    this.goto(Direction.index, index);
   }
 
   public onPan(event: any, slideElem: HTMLElement): void {
@@ -275,16 +275,16 @@ export class MatCarouselComponent
     if (Math.abs(event.velocityY) > Math.abs(event.velocityX)) {
       return;
     }
-    let Δx = event.deltaX;
+    let deltaX = event.deltaX;
     if (this.isOutOfBounds()) {
-      Δx *= 0.2; // decelerate movement;
+      deltaX *= 0.2; // decelerate movement;
     }
 
     this.renderer.setStyle(slideElem, 'cursor', 'grabbing');
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transform',
-      this.getTranslation(this.getOffset() + Δx)
+      this.getTranslation(this.getOffset() + deltaX)
     );
   }
 
@@ -355,15 +355,15 @@ export class MatCarouselComponent
       const rtl = this.orientation === 'rtl';
 
       switch (direction) {
-        case Direction.Left:
+        case Direction.left:
           return rtl
             ? this.listKeyManager.setNextItemActive()
             : this.listKeyManager.setPreviousItemActive();
-        case Direction.Right:
+        case Direction.right:
           return rtl
             ? this.listKeyManager.setPreviousItemActive()
             : this.listKeyManager.setNextItemActive();
-        case Direction.Index:
+        case Direction.index:
           return this.listKeyManager.setActiveItem(index);
       }
     }
@@ -380,7 +380,7 @@ export class MatCarouselComponent
       this.playing = true;
     });
     animation.onDone(() => {
-      this.change.emit(this.currentIndex);
+      this.changeEmitter.emit(this.currentIndex);
       this.playing = false;
       if (this.lazyLoad) {
         this.slidesList.find( (s, i) => i === (this.currentIndex + 1) % this.slidesList.length).load = true;

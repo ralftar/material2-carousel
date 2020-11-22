@@ -84,7 +84,7 @@ describe('MatCarouselComponent', () => {
 
   describe('@Output(change)', () => {
     beforeEach(() => {
-      spyOn(component.change, 'emit');
+      spyOn(component.changeEmitter, 'emit');
       component.loop = true;
     });
 
@@ -93,21 +93,21 @@ describe('MatCarouselComponent', () => {
       component.slideTo(idx);
       tick();
 
-      expect(component.change.emit).toHaveBeenCalledWith(idx);
+      expect(component.changeEmitter.emit).toHaveBeenCalledWith(idx);
     }));
 
     it('should emit when next is called', fakeAsync(() => {
       component.next();
       tick();
 
-      expect(component.change.emit).toHaveBeenCalledWith(1);
+      expect(component.changeEmitter.emit).toHaveBeenCalledWith(1);
     }));
 
     it('should emit when previous is called', fakeAsync(() => {
       component.previous();
       tick();
 
-      expect(component.change.emit).toHaveBeenCalledWith(component.slidesList.length - 1);
+      expect(component.changeEmitter.emit).toHaveBeenCalledWith(component.slidesList.length - 1);
     }));
 
     it('should emit when autoplay is set', fakeAsync(() => {
@@ -117,7 +117,7 @@ describe('MatCarouselComponent', () => {
 
       component.autoplay = false;
 
-      expect(component.change.emit).toHaveBeenCalledWith(1);
+      expect(component.changeEmitter.emit).toHaveBeenCalledWith(1);
     }));
   });
 });

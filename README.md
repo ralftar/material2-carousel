@@ -111,4 +111,4 @@ import { MatCarouselSlide, MatCarouselSlideComponent } from '@ngmodule/material-
 ### Testing
 `ng test carousel --watch false`
 ### Running the demo application
-`ng serve demo --source-map`
+`ng serve demo`
